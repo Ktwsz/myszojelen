@@ -1,9 +1,23 @@
 extends SteringBaseScript
 
 const HALF_PI = PI / 2.0
+const QUART_PI = PI / 4.0
 
 export var joy_sensinitivy := 0.5 
 
+const ANGLE_OFFSET = PI / 8.0
+
+# These are angle ranges for joypad directions
+onready var FACING_ANGLES : Dictionary = {
+	Character.Facing.TOP_LEFT: { 'min': -PI + ANGLE_OFFSET, 'max': -3 * QUART_PI + ANGLE_OFFSET },
+	Character.Facing.TOP: { 'min': -3 * QUART_PI + ANGLE_OFFSET, 'max': -HALF_PI + ANGLE_OFFSET },
+	Character.Facing.TOP_RIGHT: { 'min': -HALF_PI + ANGLE_OFFSET, 'max': -QUART_PI + ANGLE_OFFSET },
+	Character.Facing.RIGHT: { 'min': -QUART_PI + ANGLE_OFFSET, 'max': 0 + ANGLE_OFFSET },
+	Character.Facing.BOTTOM_RIGHT: { 'min': 0 + ANGLE_OFFSET, 'max': QUART_PI + ANGLE_OFFSET },
+	Character.Facing.BOTTOM: { 'min': QUART_PI + ANGLE_OFFSET, 'max': HALF_PI + ANGLE_OFFSET },
+	Character.Facing.BOTTOM_LEFT: { 'min': HALF_PI + ANGLE_OFFSET, 'max': 3 * QUART_PI + ANGLE_OFFSET }, 
+	Character.Facing.LEFT: { 'min': 3 * QUART_PI + ANGLE_OFFSET, 'max': PI + ANGLE_OFFSET }
+}
 
 func steer(delta:float) -> bool:
 	var requested_direction = _get_axis_from_joy()
@@ -44,13 +58,12 @@ func _get_axis_from_joy() -> int:
 	
 	var joy_angle = joy_vec.angle()
 	
-	if joy_angle < 0 and joy_angle > -HALF_PI:
-		return Character.Facing.TOP_RIGHT
-	elif joy_angle < -HALF_PI and joy_angle > -PI:
-		return Character.Facing.TOP_LEFT
-	elif joy_angle > 0 and joy_angle < HALF_PI:
-		return Character.Facing.BOTTOM_RIGHT
-	elif joy_angle > HALF_PI and joy_angle < PI:
-		return Character.Facing.BOTTOM_LEFT
-	
+	for facing in Character.Facing.values():
+		if _is_in_facing_angle(joy_angle, facing):
+			return facing
+
 	return -1
+
+
+func _is_in_facing_angle(val:float, facing: int) -> bool:
+	return val > FACING_ANGLES[facing].min and val < FACING_ANGLES[facing].max

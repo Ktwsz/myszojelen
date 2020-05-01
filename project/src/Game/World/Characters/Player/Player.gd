@@ -76,5 +76,5 @@ func _rotate(dir:int) -> void:
 func update_texture() -> void:
 	.update_texture()
 	
-	shot_particles.position = shot_particles_position[facing]
-	shot_particles.show_behind_parent = facing == Facing.TOP_LEFT or facing == Facing.TOP_RIGHT
+#	shot_particles.position = shot_particles_position[facing]
+#	shot_particles.show_behind_parent = facing == Facing.TOP_LEFT or facing == Facing.TOP_RIGHT

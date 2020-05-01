@@ -12,10 +12,14 @@ export var top_right_texture : Texture
 export var bottom_right_texture : Texture
 
 enum Facing {
-	TOP_LEFT, 
+	TOP_LEFT,
+	TOP, 
 	TOP_RIGHT,
+	RIGHT,
 	BOTTOM_RIGHT,
-	BOTTOM_LEFT
+	BOTTOM,
+	BOTTOM_LEFT,
+	LEFT
 }
 
 onready var textures : Dictionary = {
@@ -85,8 +89,9 @@ func _rotate_to(to:int) -> void:
 
 
 func update_texture() -> void:
-	sprite.texture = textures[facing]
-	sprite.flip_h = (facing == Facing.TOP_LEFT or facing == Facing.BOTTOM_LEFT)
+	pass
+	# sprite.texture = textures[facing]
+	# sprite.flip_h = (facing == Facing.TOP_LEFT or facing == Facing.BOTTOM_LEFT)
 
 
 func get_forward_dir() -> Vector2:
@@ -94,11 +99,19 @@ func get_forward_dir() -> Vector2:
 	match facing:
 		Facing.TOP_LEFT:
 			dir.x = -1
+		Facing.TOP:
+			dir = Vector2(-1, -1)
 		Facing.TOP_RIGHT:
 			dir.y = -1
+		Facing.RIGHT:
+			dir = Vector2(1, -1)
 		Facing.BOTTOM_RIGHT:
 			dir.x = 1
+		Facing.BOTTOM:
+			dir = Vector2(1, 1)			
 		Facing.BOTTOM_LEFT:
 			dir.y = 1
+		Facing.LEFT:
+			dir = Vector2(-1, 1)
 	
 	return dir
