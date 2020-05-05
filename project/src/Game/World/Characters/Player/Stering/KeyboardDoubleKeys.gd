@@ -1,22 +1,18 @@
 extends SteringBaseScript
 
 var _direction_actions = {
-	"up": [ "ui_up", "ui_right" ],
-	"down": [ "ui_down", "ui_left" ],
-	"left": [ "ui_up", "ui_left" ],
-	"right": [ "ui_down", "ui_right" ]
+	"up_right": [ "ui_up", "ui_right" ],
+	"up" : [ "ui_up" ],
+	"down_left": [ "ui_down", "ui_left" ],
+	"down" : [ "ui_down" ],
+	"up_left": [ "ui_up", "ui_left" ],
+	"left" : [ "ui_left" ],
+	"down_right": [ "ui_down", "ui_right" ],
+	"right": [ "ui_right" ]
 }
 
 
 func steer(delta:float) -> bool:
-	if _want_move_to_dir("up"):
-		pass
-	elif _want_move_to_dir("down"):
-		pass
-	elif _want_move_to_dir("left"):
-		pass
-	elif _want_move_to_dir("right"):
-		pass
 	
 	var requested_direction : int = -1
 	var force_move := false
@@ -24,21 +20,37 @@ func steer(delta:float) -> bool:
 	
 	var Facing = Character.Facing
 	
-	if _want_move_to_dir("up"):
-		force_move = Input.is_action_just_pressed("ui_up")
+	if _want_move_to_dir("up_right"):
+		force_move = Input.is_action_just_pressed("ui_up") or Input.is_action_just_pressed("ui_right")
 		requested_direction = Facing.TOP_RIGHT
+	
+	elif _want_move_to_dir("down_left"):
+		force_move = Input.is_action_just_pressed("ui_down") or Input.is_action_just_pressed("ui_left")
+		requested_direction = Facing.BOTTOM_LEFT
+	
+	elif _want_move_to_dir("up_left"):
+		force_move = Input.is_action_just_pressed("ui_left") or Input.is_action_just_pressed("ui_up")
+		requested_direction = Character.Facing.TOP_LEFT
+	
+	elif _want_move_to_dir("down_right"):
+		force_move = Input.is_action_just_pressed("ui_right") or Input.is_action_just_pressed("ui_down")
+		requested_direction = Facing.BOTTOM_RIGHT
+
+	elif _want_move_to_dir("up"):
+		force_move = Input.is_action_just_pressed("ui_up")
+		requested_direction = Facing.TOP
 	
 	elif _want_move_to_dir("down"):
 		force_move = Input.is_action_just_pressed("ui_down")
-		requested_direction = Facing.BOTTOM_LEFT
+		requested_direction = Facing.BOTTOM
 	
 	elif _want_move_to_dir("left"):
 		force_move = Input.is_action_just_pressed("ui_left")
-		requested_direction = Character.Facing.TOP_LEFT
+		requested_direction = Character.Facing.LEFT
 	
 	elif _want_move_to_dir("right"):
 		force_move = Input.is_action_just_pressed("ui_right")
-		requested_direction = Facing.BOTTOM_RIGHT
+		requested_direction = Facing.RIGHT		
 	
 	if requested_direction > -1:
 		if requested_direction != facing:
@@ -56,7 +68,8 @@ func steer(delta:float) -> bool:
 
 
 func _want_move_to_dir(dir:String) -> bool:
-	return (
-		Input.is_action_pressed(_direction_actions[dir][0]) and
-		Input.is_action_pressed(_direction_actions[dir][1])
-	)
+	for action in _direction_actions[dir]:
+		if not Input.is_action_pressed(action):
+			return false
+
+	return true

@@ -80,18 +80,19 @@ volume_db = -10.0
 [node name="Stering" type="Node" parent="." index="6"]
 script = ExtResource( 8 )
 
-[node name="Joystick" type="Node" parent="Stering" index="0"]
+[node name="KeyboardDoubleKeys" type="Node" parent="Stering" index="0"]
+script = ExtResource( 12 )
+wait_time_after_rotate = 0.4
+
+[node name="Joystick" type="Node" parent="Stering" index="1"]
 script = ExtResource( 9 )
 
-[node name="KeyboardRotating" type="Node" parent="Stering" index="1"]
+[node name="KeyboardRotating" type="Node" parent="Stering" index="2"]
 script = ExtResource( 11 )
 enabled = false
 
-[node name="Rotator" type="Node" parent="Stering" index="2"]
+[node name="Rotator" type="Node" parent="Stering" index="3"]
 script = ExtResource( 13 )
-
-[node name="KeyboardDoubleKeys" type="Node" parent="Stering" index="3"]
-script = ExtResource( 12 )
 
 [node name="KeyboardNormal" type="Node" parent="Stering" index="4"]
 script = ExtResource( 10 )
