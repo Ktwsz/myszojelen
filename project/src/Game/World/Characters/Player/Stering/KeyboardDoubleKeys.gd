@@ -50,7 +50,7 @@ func steer(delta:float) -> bool:
 	
 	elif _want_move_to_dir("right"):
 		force_move = Input.is_action_just_pressed("ui_right")
-		requested_direction = Facing.RIGHT		
+		requested_direction = Facing.RIGHT
 	
 	if requested_direction > -1:
 		if requested_direction != facing:
